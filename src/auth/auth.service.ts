@@ -1,9 +1,11 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Repository } from 'typeorm';
+import { User } from '../typeorm/entities/user.entitie';
 
 //Aaqui manejo la logica de negocio
 // al decirle que es injectable, le indico que no es necesario instanciar en donde se use
@@ -13,20 +15,20 @@ export class AuthService {
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    @Inject('USER_REPOSITORY')
+    private userRepository: Repository<User>,
   ) {}
 
   async signup(dto: AuthDto) {
     const hash = await argon.hash(dto.password);
     try {
-      const ifExists = await this.prisma.user.findFirst({
+      const ifExists = await this.userRepository.findOne({
         where: {
           email: dto.email,
         },
       });
       if (ifExists) throw new ForbiddenException('Credentials taken');
-      const user = await this.prisma.user.create({
-        data: { email: dto.email, hash },
-      });
+      const user = await this.userRepository.save({ ...dto, hash });
       return this.signToken(user.id, user.email);
     } catch (error) {
       throw new ForbiddenException(error.message);
@@ -34,7 +36,7 @@ export class AuthService {
   }
   async signin(dto: AuthDto) {
     try {
-      const user = await this.prisma.user.findFirst({
+      const user = await this.userRepository.findOne({
         where: {
           email: dto.email,
         },
@@ -57,7 +59,7 @@ export class AuthService {
       sub: userId,
       email,
     };
-    const secret = this.config.get('JWT_SECRET');
+    const secret = process.env.JWT_SECRET || 'jwt-secret';
     const token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
       secret,
