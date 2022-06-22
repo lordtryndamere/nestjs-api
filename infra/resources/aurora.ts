@@ -40,7 +40,9 @@ export function CreateAuroraServerless(
         secondsUntilAutoPause: 1800,
       },
       tags,
+      enableHttpEndpoint: true,
     },
+
     { provider },
   );
 

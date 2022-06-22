@@ -1,11 +1,11 @@
 encryptionsalt: v1:jPbFye9mBiA=:v1:AknSlEneRk8O6p5g:Z9OegvdJzdkrRdJb4W4MaUEaRnrMxA==
 config:
   aws:assume-role: arn:aws:iam::525443015883:role/pulumi-rol
-  aws:privateSubnets: subnet-056f8ffedabe84625,subnet-05ab5b2b0b7dac492
+  aws:privateSubnets: subnet-053362cef260d08cf,subnet-06fbd5de8050b6b7f
   aws:region: us-east-1
   aws:sessionName: dev-nestjs-api
-  aws:vpcId: vpc-0a87fb672c34c6a4b
-  aws:vpcName: default
+  aws:vpcId: vpc-0249308b11b31591d
+  aws:vpcName: nestjs-vpc
   db:usersPassword:
     secure: v1:/Uowz2J1Tudjs6Oe:XVvTRPQsXj4WH6uq0DIy4FVguWugbWGB+Q==
   db:usersSecurityGroupList:

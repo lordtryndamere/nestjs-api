@@ -24,6 +24,15 @@ export function CreateMysqlSecurityGroup(
       name: `${moduleType}-${project}-sg-${name}`,
       description: `${name.toUpperCase()} - Aurora Security Group`,
       vpcId: vpc.id,
+      ingress: [
+        {
+          fromPort: 0,
+          toPort: 0,
+          protocol: '-1',
+          cidrBlocks: ['0.0.0.0/0'],
+          ipv6CidrBlocks: ['::/0'],
+        },
+      ],
       egress: [
         {
           fromPort: 0,

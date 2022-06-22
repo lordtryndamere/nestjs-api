@@ -1,5 +1,5 @@
 import * as aws from '@pulumi/aws';
-import * as pulumi from '@pulumi/pulumi';
+//import * as pulumi from '@pulumi/pulumi';
 import { getProvider } from './provider';
 import { getTags } from './tags';
 

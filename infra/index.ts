@@ -5,6 +5,7 @@ import { createAuroraSubnetGroup } from './resources/aurora-configurations';
 import { CreateMysqlSecurityGroup } from './resources/security-groups';
 import { CreateEcsCluster } from './resources/ecs';
 import { CreateAlb } from './resources/alb';
+import { CreateEcr } from './resources/ecr';
 
 const project = pulumi.getProject();
 const dbConfig = new pulumi.Config('db');
@@ -34,9 +35,10 @@ const usersAuroraServerless = CreateAuroraServerless(
 );
 
 const ecsCluster = CreateEcsCluster(`${moduleType}-${project}-ecs`);
-
+const apiEcr = CreateEcr();
 const applicationLoadBalancer = CreateAlb();
 
 export const albEndpoint = applicationLoadBalancer.dnsName;
 export const ecsClusterArn = ecsCluster.arn;
 export const usersAuroraServerlessEndpoint = usersAuroraServerless.endpoint;
+export const apiEcrUrl = apiEcr.repository.repositoryUrl;
