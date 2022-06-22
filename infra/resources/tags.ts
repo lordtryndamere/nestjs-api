@@ -5,10 +5,10 @@ const project = pulumi.getProject();
 
 export function getTags(): { [key: string]: string } {
   return {
-    CostCenter: '501A000400',
+    CostCenter: '5010211025',
     Area: 'AunaDigital',
     Environment: stack,
-    Team: 'CommonComponents',
-    Project: project,
+    Team: 'PODIEHR',
+    Project: 'Auth'
   };
 }

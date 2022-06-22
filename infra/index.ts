@@ -1,24 +1,42 @@
-import { CreateAlb } from './resources/alb';
-import { getDynamodb } from './resources/dynamodb';
-import { CreateEcr } from './resources/ecr';
-import { CreateFargate } from './resources/fargate';
-import { CreateIamUser } from './resources/iam';
+import * as pulumi from '@pulumi/pulumi';
 
-CreateIamUser();
-const [alb, tg] = CreateAlb();
-const dynamoTable = getDynamodb();
-const apiEcr = CreateEcr();
-const [cluster, taskDefinition, service] = CreateFargate(
-  dynamoTable,
-  tg,
-  apiEcr.repository.repositoryUrl.apply(
-    (_value) => `${_value}:${process.env.SHORT_COMMIT || ':latest'}`,
-  ),
+import { CreateAuroraServerless } from './resources/aurora';
+import { createAuroraSubnetGroup } from './resources/aurora-configurations';
+import { CreateMysqlSecurityGroup } from './resources/security-groups';
+import { CreateEcsCluster } from './resources/ecs';
+import { CreateAlb } from './resources/alb';
+
+const project = pulumi.getProject();
+const dbConfig = new pulumi.Config('db');
+
+const projectConfig = new pulumi.Config('project');
+const moduleType = projectConfig.require('moduleType');
+
+const dbSubnetGroupName = `${moduleType}-${project}-rds-sng`;
+createAuroraSubnetGroup(dbSubnetGroupName);
+
+const usersAllowSecurityGroups = dbConfig.require('usersSecurityGroupList');
+
+const usersDbPassword = dbConfig.require('usersPassword');
+
+const usersSecurityGroup = CreateMysqlSecurityGroup(
+  `users`,
+  usersAllowSecurityGroups ? usersAllowSecurityGroups.split(',') : [],
 );
 
-export const albEndpoint = alb.dnsName;
-export const dynamoTableArn = dynamoTable.arn;
-export const apiEcrUrl = apiEcr.repository.repositoryUrl;
-export const clusterArn = cluster.arn;
-export const taskDefinitionArn = taskDefinition.arn;
-export const serviceUrn = service.urn;
+const usersAuroraServerless = CreateAuroraServerless(
+  `users`,
+  1,
+  2,
+  usersSecurityGroup,
+  usersDbPassword,
+  dbSubnetGroupName,
+);
+
+const ecsCluster = CreateEcsCluster(`${moduleType}-${project}-ecs`);
+
+const applicationLoadBalancer = CreateAlb();
+
+export const albEndpoint = applicationLoadBalancer.dnsName;
+export const ecsClusterArn = ecsCluster.arn;
+export const usersAuroraServerlessEndpoint = usersAuroraServerless.endpoint;
