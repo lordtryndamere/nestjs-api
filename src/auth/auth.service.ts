@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, Inject } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+//import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
@@ -12,7 +12,7 @@ import { User } from '../typeorm/entities/user.entitie';
 @Injectable({})
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
+    //  private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
     @Inject('USER_REPOSITORY')

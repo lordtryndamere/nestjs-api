@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PrismaService } from '../../prisma/prisma.service';
+//import { PrismaService } from '../../prisma/prisma.service';
 import { Repository } from 'typeorm';
 import { User } from '../../typeorm/entities/user.entitie';
 
@@ -10,7 +10,7 @@ import { User } from '../../typeorm/entities/user.entitie';
 export class JwtStategy extends PassportStrategy(Strategy) {
   constructor(
     private config: ConfigService,
-    private prisma: PrismaService,
+    // private prisma: PrismaService,
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
   ) {
