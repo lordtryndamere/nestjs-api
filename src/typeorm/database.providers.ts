@@ -7,7 +7,9 @@ export const databaseProviders = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',
-        host: process.env.HOST,
+        host:
+          'nest-api.cluster-c1rtbhbfjwdb.us-east-1.rds.amazonaws.com' ||
+          process.env.HOST,
         port: 3306,
         username: process.env.DB_USER || 'root',
         password: 'Madara*20',
