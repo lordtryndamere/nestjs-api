@@ -7,7 +7,7 @@ export const databaseProviders = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',
-        host: process.env.DATABASE_URL,
+        host: process.env.HOST,
         port: 3306,
         username: process.env.DB_USER || 'root',
         password: 'Madara*20',
