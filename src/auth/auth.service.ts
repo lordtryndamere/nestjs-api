@@ -28,7 +28,11 @@ export class AuthService {
         },
       });
       if (ifExists) throw new ForbiddenException('Credentials taken');
-      const user = await this.userRepository.save({ ...dto, hash });
+      const user = await this.userRepository.save({
+        ...dto,
+        hash,
+        createdAt: new Date(),
+      });
       return this.signToken(user.id, user.email);
     } catch (error) {
       throw new ForbiddenException(error.message);

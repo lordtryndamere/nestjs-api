@@ -15,8 +15,8 @@ export const databaseProviders = [
         password: 'Madara*20',
         database: 'nest',
         entities: entities,
-        synchronize: false,
-        logging: false,
+        synchronize: process.env.NODE_ENV === 'production' ? false : true,
+        logging: process.env.NODE_ENV === 'production' ? false : true,
       });
 
       return dataSource.initialize();

@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Bookmark } from './bookmark.entitie';
+import { Transaction } from './transaction.entitie';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -22,6 +23,24 @@ export class User {
 
   @Column()
   hash: string;
+  @Column({
+    default: '0',
+    nullable: true,
+  })
+  initialAmount: string;
+  @Column({
+    nullable: true,
+  })
+  currentAmount: string;
+  @Column({
+    nullable: true,
+  })
+  alvailableForNextMonth: string;
+  @Column({
+    default: 'COP',
+    nullable: true,
+  })
+  currency: string;
 
   @Column({
     nullable: true,
@@ -33,4 +52,6 @@ export class User {
 
   @OneToMany(() => Bookmark, (bookmark) => bookmark.user)
   bookmarks: Bookmark[];
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
+  transactions: Transaction[];
 }
