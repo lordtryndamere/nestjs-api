@@ -31,17 +31,22 @@ export class CategoryService {
   }
   async editCategoryById(categoryId: number, dto: EditCategoryDto) {
     try {
-      const findCategory = await this.categoryRepository.findOne({
+      let findCategory = await this.categoryRepository.findOne({
         where: { id: categoryId },
       });
       if (!findCategory)
         throw new ForbiddenException('Access to resources denied');
-      return this.categoryRepository.update(
+
+      await this.categoryRepository.update(
         {
           id: findCategory.id,
         },
         { ...dto, updatedAt: new Date() },
       );
+      findCategory = await this.categoryRepository.findOne({
+        where: { id: categoryId },
+      });
+      return findCategory;
     } catch (error) {
       throw new ForbiddenException(error.message);
     }
