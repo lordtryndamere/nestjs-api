@@ -46,6 +46,7 @@ export class TransactionController {
       params.endDate,
     );
   }
+
   @Patch(':id')
   editTransactionById(
     @GetUser('id') userId: number,

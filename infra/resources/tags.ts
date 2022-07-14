@@ -9,6 +9,6 @@ export function getTags(): { [key: string]: string } {
     Area: 'AunaDigital',
     Environment: stack,
     Team: 'PODIEHR',
-    Project: 'Auth'
+    Project: project,
   };
 }
