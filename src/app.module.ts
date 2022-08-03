@@ -6,6 +6,8 @@ import { BookmarkModule } from './bookmark/bookmark.module';
 import { ConfigModule } from '@nestjs/config';
 import { TransactionModule } from './transaction/transaction.module';
 import { CategoryModule } from './category/category.module';
+import { ProductModule } from './product/product.module';
+import { RestaurantModule } from './restaurant/restaurant.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { CategoryModule } from './category/category.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TransactionModule,
     CategoryModule,
+    ProductModule,
+    RestaurantModule,
   ],
   providers: [Logger],
 })

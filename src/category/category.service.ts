@@ -1,6 +1,6 @@
 import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { Category } from 'src/typeorm/entities/category.entitie';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateCategoryDto, EditCategoryDto } from './dto/request';
 
 @Injectable()
@@ -11,6 +11,18 @@ export class CategoryService {
   ) {}
   async getAllCategories(): Promise<Category[]> {
     return this.categoryRepository.find({
+      order: {
+        createdAt: 'asc',
+      },
+      cache: true,
+    });
+  }
+  async filterCategory(categoryName = ''): Promise<Category[]> {
+    return this.categoryRepository.find({
+      where: {
+        name: Like(`%${categoryName}%`),
+      },
+
       order: {
         createdAt: 'asc',
       },

@@ -20,6 +20,10 @@ export class CategoryController {
   findAllCategories() {
     return this.categoryService.getAllCategories();
   }
+  @Get('filterCategory/:categoryName?')
+  filterCategories(@Param('categoryName') categoryName: string) {
+    return this.categoryService.filterCategory(categoryName);
+  }
   @Patch(':id')
   editTransactionById(
     @Param('id', ParseIntPipe) id: number,
